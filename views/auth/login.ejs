@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="eyebrow">Meridian · Student Records</div>
+      <h1>Sign in</h1>
+      <p class="sub">Access your dashboard, courses, and enrollments.</p>
+
+      <%- include('../partials/flash') %>
+
+      <form action="/auth/login" method="POST" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@portal.edu">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required minlength="6" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+      </form>
+
+      <div class="switch">No account? <a href="/auth/register">Register as a student</a></div>
+
+      <p style="margin-top:20px;font-size:11.5px;color:var(--slate-light);line-height:1.6;">
+        Demo admin: admin@portal.edu / Admin@123<br>
+        Demo student: alice@portal.edu / Student@123
+      </p>
+    </div>
+  </div>
+</body>
+</html>

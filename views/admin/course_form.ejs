@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+<div class="shell">
+  <%- include('../partials/sidebar', { active: 'courses' }) %>
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Registrar</span>
+        <h1><%= title %></h1>
+        <p>Fields marked are required and validated before saving.</p>
+      </div>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <div class="panel" style="padding:24px;max-width:560px;">
+      <form action="<%= action %>" method="POST" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="code">Course code</label>
+            <input type="text" id="code" name="code" required minlength="2" maxlength="10"
+                   value="<%= course.code || '' %>" placeholder="CS101" style="text-transform:uppercase;">
+          </div>
+          <div class="field">
+            <label for="credits">Credits</label>
+            <input type="number" id="credits" name="credits" required min="1" max="10"
+                   value="<%= course.credits || 3 %>">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="title">Course title</label>
+          <input type="text" id="title" name="title" required minlength="3"
+                 value="<%= course.title || '' %>" placeholder="Introduction to Programming">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="department">Department</label>
+            <input type="text" id="department" name="department" required
+                   value="<%= course.department || '' %>" placeholder="Computer Science">
+          </div>
+          <div class="field">
+            <label for="semester">Semester</label>
+            <input type="text" id="semester" name="semester" required
+                   value="<%= course.semester || '' %>" placeholder="May 2026">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="capacity">Capacity</label>
+          <input type="number" id="capacity" name="capacity" required min="1"
+                 value="<%= course.capacity || 30 %>">
+        </div>
+
+        <button class="btn btn-gold" type="submit">Save course</button>
+        <a href="/courses/manage" class="btn btn-outline" style="margin-left:8px;">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

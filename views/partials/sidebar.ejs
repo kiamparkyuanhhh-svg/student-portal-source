@@ -1,0 +1,22 @@
+<div class="sidebar">
+  <div class="brand">Meridian</div>
+  <div class="brand-sub">Student Records</div>
+
+  <nav>
+    <a href="/dashboard" class="<%= active === 'dashboard' ? 'active' : '' %>">Dashboard</a>
+    <% if (currentUser.role === 'student') { %>
+      <a href="/courses" class="<%= active === 'courses' ? 'active' : '' %>">Browse Courses</a>
+    <% } else { %>
+      <a href="/courses/manage" class="<%= active === 'courses' ? 'active' : '' %>">Manage Courses</a>
+      <a href="/enrollments/manage" class="<%= active === 'enrollments' ? 'active' : '' %>">Manage Enrollments</a>
+    <% } %>
+  </nav>
+
+  <div class="user-box">
+    <div class="user-name"><%= currentUser.name %></div>
+    <div class="user-role"><%= currentUser.role %><% if (currentUser.student_id) { %> · <%= currentUser.student_id %><% } %></div>
+    <form action="/auth/logout" method="POST">
+      <button class="logout-btn" type="submit">Sign out</button>
+    </form>
+  </div>
+</div>

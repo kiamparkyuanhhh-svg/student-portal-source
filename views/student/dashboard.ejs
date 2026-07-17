@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+<div class="shell">
+  <%- include('../partials/sidebar', { active: 'dashboard' }) %>
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">My Records</span>
+        <h1>Welcome, <%= currentUser.name.split(' ')[0] %></h1>
+        <p>Here's where things stand with your enrollments.</p>
+      </div>
+      <a href="/courses" class="btn btn-gold">Browse courses</a>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="num"><%= stats.total %></div>
+        <div class="label">Total enrollments</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.approvedCount %></div>
+        <div class="label">Approved</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.pendingCount %></div>
+        <div class="label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.completedCount %></div>
+        <div class="label">Completed</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h2>My courses</h2>
+      </div>
+      <% if (myEnrollments.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon">🎓</div>
+          <p>You haven't enrolled in any courses yet.</p>
+          <a href="/courses" class="btn btn-gold btn-sm">Browse courses</a>
+        </div>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr><th>Course</th><th>Credits</th><th>Status</th><th>Grade</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% myEnrollments.forEach(function(e) { %>
+              <tr>
+                <td><span class="code-tag"><%= e.code %></span> &nbsp; <%= e.title %></td>
+                <td><%= e.credits %></td>
+                <td><span class="badge badge-<%= e.status %>"><%= e.status %></span></td>
+                <td><%= e.grade || '—' %></td>
+                <td class="actions">
+                  <% if (e.status === 'pending') { %>
+                    <form class="inline" action="/enrollments/<%= e.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Withdraw from this course?')">
+                      <button class="btn btn-danger btn-sm" type="submit">Withdraw</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

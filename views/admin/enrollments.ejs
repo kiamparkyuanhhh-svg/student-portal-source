@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+<div class="shell">
+  <%- include('../partials/sidebar', { active: 'enrollments' }) %>
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Registrar</span>
+        <h1>Manage Enrollments</h1>
+        <p>Approve, reject, or grade student enrollment requests.</p>
+      </div>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <form class="filter-bar" method="GET" action="/enrollments/manage">
+      <input type="text" name="keyword" placeholder="Search by student or course..." value="<%= filters.keyword %>">
+      <select name="status" onchange="this.form.submit()">
+        <option value="">All statuses</option>
+        <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>Pending</option>
+        <option value="approved" <%= filters.status === 'approved' ? 'selected' : '' %>>Approved</option>
+        <option value="rejected" <%= filters.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+        <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>Completed</option>
+      </select>
+      <button class="btn btn-outline" type="submit">Search</button>
+    </form>
+
+    <div class="panel">
+      <% if (enrollments.length === 0) { %>
+        <div class="empty-state"><div class="icon">📋</div><p>No enrollments match your search.</p></div>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr><th>Student</th><th>Course</th><th>Status</th><th>Grade</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% enrollments.forEach(function(e) { %>
+              <tr>
+                <td><%= e.student_name %><br><span class="meta" style="font-size:11.5px;color:var(--slate-light);"><%= e.student_id %></span></td>
+                <td><span class="code-tag"><%= e.code %></span> &nbsp;<%= e.title %></td>
+                <td><span class="badge badge-<%= e.status %>"><%= e.status %></span></td>
+                <td><%= e.grade || '—' %></td>
+                <td class="actions">
+                  <form action="/enrollments/<%= e.id %>?_method=PUT" method="POST" style="display:flex;gap:6px;align-items:center;">
+                    <select name="status" style="padding:6px 8px;border:1px solid var(--border);border-radius:5px;font-size:12.5px;">
+                      <option value="pending" <%= e.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                      <option value="approved" <%= e.status === 'approved' ? 'selected' : '' %>>Approved</option>
+                      <option value="rejected" <%= e.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                      <option value="completed" <%= e.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                    </select>
+                    <input type="text" name="grade" placeholder="Grade" value="<%= e.grade || '' %>" style="width:60px;padding:6px 8px;border:1px solid var(--border);border-radius:5px;font-size:12.5px;">
+                    <button class="btn btn-gold btn-sm" type="submit">Save</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

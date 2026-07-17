@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+<div class="shell">
+  <%- include('../partials/sidebar', { active: 'dashboard' }) %>
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Registrar Overview</span>
+        <h1>Admin Dashboard</h1>
+        <p>Snapshot of students, courses, and enrollment activity.</p>
+      </div>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="num"><%= stats.totalStudents %></div>
+        <div class="label">Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.totalCourses %></div>
+        <div class="label">Courses offered</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.totalEnrollments %></div>
+        <div class="label">Total enrollments</div>
+      </div>
+      <div class="stat-card">
+        <div class="num"><%= stats.pendingEnrollments %></div>
+        <div class="label">Pending approval</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Recent enrollment activity</h2>
+        <a href="/enrollments/manage" class="btn btn-outline btn-sm">View all</a>
+      </div>
+      <% if (recentEnrollments.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <p>No enrollment activity yet.</p>
+        </div>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr><th>Student</th><th>Course</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <% recentEnrollments.forEach(function(e) { %>
+              <tr>
+                <td><%= e.student_name %></td>
+                <td><%= e.course_title %></td>
+                <td><span class="badge badge-<%= e.status %>"><%= e.status %></span></td>
+                <td><%= new Date(e.enrolled_at).toLocaleDateString() %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

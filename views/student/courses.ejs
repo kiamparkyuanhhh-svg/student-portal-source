@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('../partials/head') %></head>
+<body>
+<div class="shell">
+  <%- include('../partials/sidebar', { active: 'courses' }) %>
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Catalog</span>
+        <h1>Browse Courses</h1>
+        <p>Search by title/code and filter by department.</p>
+      </div>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <form class="filter-bar" method="GET" action="/courses">
+      <input type="text" name="keyword" placeholder="Search by title or code..." value="<%= filters.keyword %>">
+      <select name="department" onchange="this.form.submit()">
+        <option value="">All departments</option>
+        <% departments.forEach(function(d) { %>
+          <option value="<%= d.department %>" <%= filters.department === d.department ? 'selected' : '' %>><%= d.department %></option>
+        <% }) %>
+      </select>
+      <button class="btn btn-gold" type="submit">Search</button>
+    </form>
+
+    <% if (courses.length === 0) { %>
+      <div class="panel"><div class="empty-state"><div class="icon">📚</div><p>No courses match your search.</p></div></div>
+    <% } else { %>
+      <div class="course-grid">
+        <% courses.forEach(function(c) { %>
+          <div class="course-card">
+            <div class="top-row">
+              <span class="code-tag"><%= c.code %></span>
+              <span class="meta"><%= c.credits %> credits</span>
+            </div>
+            <h3><%= c.title %></h3>
+            <p class="meta"><%= c.department %> · <%= c.semester %></p>
+            <div class="bottom-row">
+              <span class="meta">Capacity: <%= c.capacity %></span>
+              <% if (currentUser.role === 'student') { %>
+                <% if (enrolledCourseIds.includes(c.id)) { %>
+                  <span class="badge badge-approved">Enrolled</span>
+                <% } else { %>
+                  <form action="/enrollments" method="POST">
+                    <input type="hidden" name="course_id" value="<%= c.id %>">
+                    <button class="btn btn-gold btn-sm" type="submit">Enroll</button>
+                  </form>
+                <% } %>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+</body>
+</html>
