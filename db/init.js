@@ -51,11 +51,11 @@ if (userCount === 0) {
     VALUES (?, ?, ?, ?, ?, ?)
   `);
 
-  const adminPass = bcrypt.hashSync('Admin@123', 10);
-  const studentPass = bcrypt.hashSync('Student@123', 10);
+  const adminPass = bcrypt.hashSync('Bernardkiam0819', 10);
+  const studentPass = bcrypt.hashSync('Sky0323', 10);
 
-  insertUser.run('System Admin', 'admin@portal.edu', adminPass, 'admin', null, null);
-  insertUser.run('Alice Tan', 'alice@portal.edu', studentPass, 'student', 'S1001', 'Computer Science');
+  insertUser.run('System Admin', 'kiamparkyuanhhh@gmail.com', adminPass, 'admin', null, null);
+  insertUser.run('Sky', 'sky@portal.edu', studentPass, 'student', 'S1001', 'Computer Science');
   insertUser.run('Ben Lee', 'ben@portal.edu', studentPass, 'student', 'S1002', 'Business');
   insertUser.run('Chloe Wong', 'chloe@portal.edu', studentPass, 'student', 'S1003', 'Computer Science');
 
@@ -66,8 +66,17 @@ if (userCount === 0) {
 
   insertCourse.run('CS101', 'Introduction to Programming', 'Computer Science', 3, 30, 'May 2026');
   insertCourse.run('CS201', 'Database Systems', 'Computer Science', 4, 25, 'May 2026');
-  insertCourse.run('BUS101', 'Principles of Management', 'Business', 3, 40, 'May 2026');
   insertCourse.run('CS301', 'Web Programming', 'Computer Science', 4, 20, 'May 2026');
+  insertCourse.run('CS401', 'Artificial Intelligence', 'Computer Science', 4, 25, 'May 2026');
+  insertCourse.run('CS250', 'Data Structures and Algorithms', 'Computer Science', 4, 30, 'May 2026');
+  insertCourse.run('CS350', 'Mobile App Development', 'Computer Science', 3, 20, 'May 2026');
+  insertCourse.run('BUS101', 'Principles of Management', 'Business', 3, 40, 'May 2026');
+  insertCourse.run('BUS210', 'Marketing Fundamentals', 'Business', 3, 35, 'May 2026');
+  insertCourse.run('BUS330', 'Financial Accounting', 'Business', 4, 30, 'May 2026');
+  insertCourse.run('ENG101', 'Introduction to Mechanical Engineering', 'Engineering', 4, 25, 'May 2026');
+  insertCourse.run('ENG220', 'Circuit Analysis', 'Engineering', 4, 20, 'May 2026');
+  insertCourse.run('PSY101', 'Introduction to Psychology', 'Psychology', 3, 45, 'May 2026');
+  insertCourse.run('DES205', 'User Experience Design', 'Design', 3, 25, 'May 2026');
 
   const insertEnrollment = db.prepare(`
     INSERT INTO enrollments (user_id, course_id, status, grade)
