@@ -44,14 +44,26 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/courses', courseRoutes);
 app.use('/enrollments', enrollmentRoutes);
 
-// 1. 专门用来查看数据库账号（必须放在 404 前面，且不使用 sqlite3 包）
+// 1. 专门用来查看数据库账号（自适应数据库类型）
 app.get('/show-my-users-123', (req, res) => {
     try {
         const db = require('./db/init');
-        db.all("SELECT * FROM users", [], (err, rows) => {
-            if (err) return res.status(500).send("查询出错: " + err.message);
-            res.json(rows);
-        });
+
+        // 如果是 better-sqlite3 模块（同步查询）
+        if (typeof db.prepare === 'function') {
+            const rows = db.prepare("SELECT * FROM users").all();
+            return res.json(rows);
+        }
+        
+        // 如果是普通 sqlite3 模块（异步查询）
+        if (typeof db.all === 'function') {
+            return db.all("SELECT * FROM users", [], (err, rows) => {
+                if (err) return res.status(500).send("查询出错: " + err.message);
+                res.json(rows);
+            });
+        }
+
+        res.json({ message: "未识别的 db 对象格式", dbKeys: Object.keys(db) });
     } catch (e) {
         res.status(500).send("异常: " + e.message);
     }
