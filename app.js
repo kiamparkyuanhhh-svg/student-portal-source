@@ -44,28 +44,22 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/courses', courseRoutes);
 app.use('/enrollments', enrollmentRoutes);
 
-// 404
-app.use((req, res) => {
-  res.status(404).render('404', { title: 'Not Found' });
-});
-
-// 专门用来查看数据库账号（必须放在 app.listen 上面）
+// 1. 专门用来查看数据库账号（必须放在 404 前面，且不使用 sqlite3 包）
 app.get('/show-my-users-123', (req, res) => {
     try {
-        const sqlite3 = require('sqlite3').verbose();
-        const path = require('path');
-        const dbPath = path.join(__dirname, 'db', 'portal.db');
-        const db = new sqlite3.Database(dbPath);
-
+        const db = require('./db/init');
         db.all("SELECT * FROM users", [], (err, rows) => {
-            if (err) {
-                return res.status(500).send("查询失败，错误信息: " + err.message);
-            }
+            if (err) return res.status(500).send("查询出错: " + err.message);
             res.json(rows);
         });
     } catch (e) {
-        res.status(500).send("加载失败: " + e.message);
+        res.status(500).send("异常: " + e.message);
     }
+});
+
+// 2. 404 处理（必须放在所有路由的最后面）
+app.use((req, res) => {
+    res.status(404).render('404', { title: 'Not Found' });
 });
 
 const PORT = process.env.PORT || 3000;
