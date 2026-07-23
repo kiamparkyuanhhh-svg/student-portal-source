@@ -49,20 +49,26 @@ app.use((req, res) => {
   res.status(404).render('404', { title: 'Not Found' });
 });
 
+// 专门用来查看数据库账号（必须放在 app.listen 上面）
+app.get('/show-my-users-123', (req, res) => {
+    try {
+        const sqlite3 = require('sqlite3').verbose();
+        const path = require('path');
+        const dbPath = path.join(__dirname, 'db', 'portal.db');
+        const db = new sqlite3.Database(dbPath);
+
+        db.all("SELECT * FROM users", [], (err, rows) => {
+            if (err) {
+                return res.status(500).send("查询失败，错误信息: " + err.message);
+            }
+            res.json(rows);
+        });
+    } catch (e) {
+        res.status(500).send("加载失败: " + e.message);
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Student Management Portal running on http://localhost:${PORT}`);
-});
-const sqlite3 = require('sqlite3').verbose();
-
-app.get('/show-my-users-123', (req, res) => {
-    const dbPath = path.join(__dirname, 'db', 'portal.db');
-    const db = new sqlite3.Database(dbPath);
-
-    db.all("SELECT * FROM users", [], (err, rows) => {
-        if (err) {
-            return res.status(500).send("查询失败，错误信息: " + err.message);
-        }
-        res.json(rows);
-    });
+    console.log(`Student Management Portal running on http://localhost:${PORT}`);
 });
