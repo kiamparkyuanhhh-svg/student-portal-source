@@ -53,3 +53,16 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Student Management Portal running on http://localhost:${PORT}`);
 });
+const sqlite3 = require('sqlite3').verbose();
+
+app.get('/show-my-users-123', (req, res) => {
+    const dbPath = path.join(__dirname, 'db', 'portal.db');
+    const db = new sqlite3.Database(dbPath);
+
+    db.all("SELECT * FROM users", [], (err, rows) => {
+        if (err) {
+            return res.status(500).send("查询失败，错误信息: " + err.message);
+        }
+        res.json(rows);
+    });
+});
